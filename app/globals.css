@@ -14,7 +14,8 @@
   --color-border: #E1E7EF;
   --color-primary: #3C83F6;
   --color-background: #f8fafc;
-  --color-primary-text: #999999
+  --color-primary-text: #999999;
+  --color-input-text: #1f2937;
 }
 
 @media (prefers-color-scheme: dark) {
