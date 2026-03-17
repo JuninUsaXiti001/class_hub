@@ -10,9 +10,12 @@ export default function Home() {
 
   return (
     <main>
+
       {postForm.status && (
         <PageForm type={postForm.type} />
+        
       )}
+
     </main>
   );
 }
