@@ -4,7 +4,11 @@ import { HomeWork } from "@/app/libs/models/homework"
 
 export async function GET(request: NextRequest) {
     try {
-        const query = await pool.query(`SELECT * FROM homeworks`)
+        const query = await pool.query(`SELECT * FROM homeworks ORDER BY CASE
+            WHEN type = 'Trabalho' THEN 1
+            WHEN type = 'Tarefa' THEN 2 
+            WHEN type = 'Slide/Material' THEN 3 
+            ELSE 4 END, date ASC`)
 
         return NextResponse.json(query.rows, { status: 200 })
     } catch (error) {

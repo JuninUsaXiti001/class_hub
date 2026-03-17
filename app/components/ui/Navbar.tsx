@@ -22,7 +22,7 @@ export default function Navbar() {
                     </h1>
                 </div>
 
-                <span className="text-primary text-[12px]">
+                <span className="text-primary text-[12px] max-sm:mb-1">
                     Muquifo castelo
                 </span>
 

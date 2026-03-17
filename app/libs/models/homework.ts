@@ -1,8 +1,10 @@
 import { title } from "process";
 
+export type HomeWorkType = "Trabalho" | "Tarefa" | "Slide/Material"
+
 export type HomeWork = {
     id:number;
-    type:string;
+    type:HomeWorkType;
     title:string;
     subject:string;
     description:string;
@@ -26,6 +28,7 @@ export async function createHomeWork(homeWork:HomeWork) {
 
     const result = (await querie).json
 
-    console.log((await querie).status)
-    console.log(result)
+    // console.log((await querie).status)
+    // console.log(result)
 }
+
