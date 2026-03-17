@@ -2,9 +2,23 @@ import { NextRequest, NextResponse } from "next/server"
 import pool from "@/app/libs/database/db"
 import { HomeWork } from "@/app/libs/models/homework"
 
+export async function GET(request: NextRequest) {
+    try {
+        const query = await pool.query(`SELECT * FROM homeworks`)
+
+        return NextResponse.json(query.rows, { status: 200 })
+    } catch (error) {
+        console.log(error)
+        return NextResponse.json(
+            { error: error || "Erro iterno"},
+            { status: 500 }
+        )
+    }
+}
+
 export async function POST(request: NextRequest) {
     try {
-        const body : HomeWork = await request.json()
+        const body: HomeWork = await request.json()
 
         // Validação correta
         if (!body.type || !body.title || !body.author || !body.date) {
