@@ -22,7 +22,7 @@ export default function PageForm({ type }) {
     const { postForm, setPostForm } = usePostForm();
 
     function teste() {
-        var id = document.getElementById("date-picker")
+        var id = document.getElementById("subject-select")
         alert(id.value)
     }
 
@@ -47,12 +47,14 @@ export default function PageForm({ type }) {
                 body: JSON.stringify({
                     type: c_type || "Tarefa",
                     title: c_title || "Teste",
-                    subject: c_subject,
+                    subject: c_subject || "História",
                     description: c_description,
                     date: c_date || "2026-03-16",
+                    archives: {},
                     author: c_author || "Matheus"
                 })
             })
+
 
             const data = await res.json()
 
@@ -143,7 +145,7 @@ export default function PageForm({ type }) {
                 </form>
 
                 <div className="mt-6 flex justify-end gap-4 max-md:w-full max-md:justify-start max-md:flex-col">
-                    <button className="px-4 py-2 bg-background text-input-text border border-border rounded-full hover:bg-primary-text/15 transition duration-300 cursor-pointer">Cancelar</button>
+                    <button onClick={teste} className="px-4 py-2 bg-background text-input-text border border-border rounded-full hover:bg-primary-text/15 transition duration-300 cursor-pointer">Cancelar</button>
                     <button onClick={() => { createHomeWorkClient() }} className="px-4 py-2 bg-primary text-white rounded-full hover:bg-primary/90 transition duration-300 cursor-pointer">{type === "create" ? "Adicionar" : "Salvar"}</button>
                 </div>
             </div>

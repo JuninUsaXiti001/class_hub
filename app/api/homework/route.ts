@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
 import pool from "@/app/libs/database/db"
+import { HomeWork } from "@/app/libs/models/homework"
 
 export async function POST(request: NextRequest) {
     try {
-        const body = await request.json()
-
-        const { type, title, description, date, author } = body
+        const body : HomeWork = await request.json()
 
         // Validação correta
-        if (!type || !title || !author || !date) {
+        if (!body.type || !body.title || !body.author || !body.date) {
             return NextResponse.json(
                 { error: "Dados inválidos" },
                 { status: 400 }
@@ -16,10 +15,9 @@ export async function POST(request: NextRequest) {
         }
 
         const query = await pool.query(
-            `INSERT INTO homeworks (type, title, description, date, author)
-             VALUES ($1, $2, $3, $4, $5)
-             RETURNING *`,
-            [type, title, description, date, author]
+            `INSERT INTO homeworks (type, title, subject, description, date, archives, author)
+             VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+            [body.type, body.title, body.subject, body.description, body.date, body.archives, body.author]
         )
 
         return NextResponse.json(

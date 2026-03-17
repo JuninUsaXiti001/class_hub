@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="">
-      <body className={`bg-white  antialiased `}>
+      <body className={`antialiased `}>
 
         <PostFormProvider>
           <Navbar />
