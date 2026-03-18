@@ -10,23 +10,34 @@ export const metadata: Metadata = {
   description: "Gerenciador de tarefas do muquifo castelo",
 }
 import { PostFormProvider } from "@/app/hooks/usePostForm"
+import { ToastContainer } from "react-toastify";
 
 export default function RootLayout({
-    children,
-  }: Readonly<{
-    children: React.ReactNode;
-  }>) {
-    return (
-      <html lang="en" className="">
-        <body className={`antialiased `}>
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" className="">
+      <body className={`antialiased `}>
 
-          <PostFormProvider>
-            <Navbar />
+        <PostFormProvider>
+          <Navbar />
 
-            {children}
-          </PostFormProvider>
+          {children}
 
-        </body>
-      </html>
-    );
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={false}
+            rtl={false}
+            pauseOnHover={true}
+            theme="light"
+          />
+        </PostFormProvider>
+      </body>
+    </html>
+  );
 }

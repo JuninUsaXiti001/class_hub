@@ -29,7 +29,7 @@ export default function Home() {
     <main className="max-w-6xl mx-auto px-4">
 
 
-      <ul className={`grid mt-6 transition-all duration-300 ${homeWorkData.length === 0 ? "place-items-center" : "grid-cols-3 gap-4 max-md:grid-cols-2 max-sm:grid-cols-1"}`}>
+      <ul className={`grid my-6 transition-all duration-300 ${homeWorkData.length === 0 ? "place-items-center" : "grid-cols-3 gap-4 max-md:grid-cols-2 max-sm:grid-cols-1"}`}>
 
         {homeWorkData.length === 0 ? (
           <div className="flex flex-col gap-1 justify-center items-center text-center">

@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
         const body: HomeWork = await request.json()
 
         // Validação correta
-        if (!body.type || !body.title || !body.author || !body.date) {
+        if (!body.title || !body.author || !body.date) {
             return NextResponse.json(
                 { error: "Dados inválidos" },
                 { status: 400 }
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
         const query = await pool.query(
             `INSERT INTO homeworks (type, title, subject, description, date, archives, author)
              VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-            [body.type, body.title, body.subject, body.description, body.date, body.archives, body.author]
+            [body.type, body.title, body.subject, body.description, body.date, JSON.stringify(body.archives), body.author]
         )
 
         return NextResponse.json(

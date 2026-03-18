@@ -2,6 +2,7 @@ import icons from "@/app/libs/icons";
 import { cloneElement } from "react";
 import "@tailwindplus/elements"
 import { deleteHomeWork } from "@/app/libs/models/homework";
+import { toast } from "react-toastify";
 
 const meses = [
     "Jan",
@@ -26,8 +27,13 @@ const colors = {
 
 function DeleteButtonUI({ homeWork }) {
 
-    function deleteHomeWorkClient() {
-        deleteHomeWork(homeWork.id)
+    async function deleteHomeWorkClient() {
+        const del = await deleteHomeWork(homeWork.id)
+
+        if (del == 200) {
+            toast.success("Tarefa deletada com sucesso!")
+        }
+
     }
 
     return (

@@ -37,9 +37,9 @@ export async function deleteHomeWork(id: number) {
         method: 'DELETE',
     })
 
-    const result = (await querie).json
+    // const result = (await querie).json
 
-    console.log(result)
+    return (await querie).status
 }
 
 export async function getHomeWorkData({setHomeWorkData} : {setHomeWorkData : ( data : HomeWork[]) => void}) {

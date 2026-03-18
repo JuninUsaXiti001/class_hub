@@ -4,9 +4,7 @@ import { usePostForm } from "@/app/hooks/usePostForm";
 import icons from "@/app/libs/icons";
 import "@tailwindplus/elements";
 import { cloneElement } from "react";
-
-import { createHomeWork } from '@/app/libs/models/homework'
-
+import { toast } from "react-toastify";
 
 const subjects = [
     "Matematica", "Física", "Química", "Biologia",
@@ -19,8 +17,6 @@ const types = [
 ]
 
 export default function PageForm({ type }) {
-    const { homeData, setHomeData } = usePostForm();
-
     async function createHomeWorkClient() {
         const c_type = document.getElementById("type-select").value
         const c_title = document.getElementById("title").value
@@ -28,6 +24,30 @@ export default function PageForm({ type }) {
         const c_description = document.getElementById("description").value
         const c_date = document.getElementById("date-picker").value
         const c_author = document.getElementById("author").value
+        const c_file = document.getElementById("dropzone-file").files[0]
+        const c_final_file = [];
+
+        if (!c_title || !c_date || !c_author) {
+            toast.error("Por favor, preencha todos os campos obrigatórios.")
+            return
+        }
+
+        if (c_file) {
+            const file_extension = c_file.name.split(".").pop()
+            if (file_extension != "pdf" && file_extension != "jpg" && file_extension != "png" && file_extension != "gif") {
+                //alert("Formato de arquivo não suportado. Por favor, selecione um arquivo PDF ou imagem (JPG, PNG, GIF).")
+                toast.error("Formato de arquivo não suportado. Por favor, selecione um arquivo PDF ou imagem (JPG, PNG, GIF).")
+                return
+            }
+
+            if (c_file.size > 5 * 1024 * 1024) { // Limite de 5MB
+                toast.error("O arquivo é muito grande. O limite é de 5MB.")
+                return
+            }
+
+            c_final_file.push({url: "1223123", type: file_extension})
+        }
+
 
         try {
             const res = await fetch("/api/homework", {
@@ -36,13 +56,13 @@ export default function PageForm({ type }) {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    type: c_type || "Tarefa",
-                    title: c_title || "Teste",
-                    subject: c_subject || "História",
+                    type: c_type,
+                    title: c_title,
+                    subject: c_subject,
                     description: c_description,
-                    date: c_date || "2026-03-16",
-                    archives: {},
-                    author: c_author || "Matheus"
+                    date: c_date,
+                    archives: c_final_file,
+                    author: c_author
                 })
             })
 
@@ -51,16 +71,18 @@ export default function PageForm({ type }) {
 
             if (!res.ok) {
                 console.error(data)
-                alert("Erro ao criar tarefa")
+                toast.error("Erro ao criar tarefa: " + (data.error || "Erro desconhecido"))
                 return
             }
 
             console.log("Sucesso:", data)
-            alert("Tarefa criada!")
+            //alert("Tarefa criada!")
+            toast.success("Tarefa criada com sucesso!")
 
         } catch (err) {
             console.error(err)
-            alert("Erro na requisição")
+            //alert("Erro na requisição")
+            toast.error("Erro na requisição")
         }
     }
 
@@ -136,12 +158,12 @@ export default function PageForm({ type }) {
 
                                 {/* Matéria */}
                                 <el-select id="subject-select" name="subject" value={subjects[0]} className="mt-2 block">
-                                    <button type="button"  className="grid w-full cursor-default grid-cols-1 rounded-md border border-border bg-white py-3 pr-2 pl-3 text-left text-black focus-visible:outline-2 focus-visible:outline-indigo-500 sm:text-sm" >
+                                    <button type="button" className="grid w-full cursor-default grid-cols-1 rounded-md border border-border bg-white py-3 pr-2 pl-3 text-left text-black focus-visible:outline-2 focus-visible:outline-indigo-500 sm:text-sm" >
                                         <el-selectedcontent className="col-start-1 row-start-1 flex items-center gap-3 pr-6 text-black">
                                             <span className="block truncate">{subjects[0]}</span>
                                         </el-selectedcontent>
 
-                                        <svg viewBox="0 0 16 16" fill="currentColor" data-slot="icon" aria-hidden="true"  className="col-start-1 row-start-1 w-5 h-5 self-center justify-self-end text-gray-400" > <path d="M5.22 10.22a.75.75 0 0 1 1.06 0L8 11.94l1.72-1.72a.75.75 0 1 1 1.06 1.06l-2.25 2.25a.75.75 0 0 1-1.06 0l-2.25-2.25a.75.75 0 0 1 0-1.06ZM10.78 5.78a.75.75 0 0 1-1.06 0L8 4.06 6.28 5.78a.75.75 0 0 1-1.06-1.06l2.25-2.25a.75.75 0 0 1 1.06 0l2.25 2.25a.75.75 0 0 1 0 1.06Z" clipRule="evenodd"fillRule="evenodd"/></svg>
+                                        <svg viewBox="0 0 16 16" fill="currentColor" data-slot="icon" aria-hidden="true" className="col-start-1 row-start-1 w-5 h-5 self-center justify-self-end text-gray-400" > <path d="M5.22 10.22a.75.75 0 0 1 1.06 0L8 11.94l1.72-1.72a.75.75 0 1 1 1.06 1.06l-2.25 2.25a.75.75 0 0 1-1.06 0l-2.25-2.25a.75.75 0 0 1 0-1.06ZM10.78 5.78a.75.75 0 0 1-1.06 0L8 4.06 6.28 5.78a.75.75 0 0 1-1.06-1.06l2.25-2.25a.75.75 0 0 1 1.06 0l2.25 2.25a.75.75 0 0 1 0 1.06Z" clipRule="evenodd" fillRule="evenodd" /></svg>
                                     </button>
 
                                     <el-options anchor="bottom start" popover className="max-h-56 w-(--button-width) overflow-auto rounded-md bg-white border border-border py-1 text-base sm:text-sm" >
@@ -178,18 +200,22 @@ export default function PageForm({ type }) {
                                     placeholder="Quem está adicionando"
                                     className="placeholder:font-medium w-full px-3 py-3 text-black placeholder:text-primary-text rounded-md border border-border focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:outline-none transition duration-300"
                                 />
+
+                                {/* File Zone */}
+                                <div class="flex items-center justify-center w-full cursor-pointer">
+                                    <label for="dropzone-file" class="rounded-2xl flex flex-col items-center justify-center w-full bg-white border border-dashed border-default-strong border-border rounded-base cursor-pointer hover:bg-neutral-tertiary-medium hover:border-primary transition duration-300">
+                                        <div class="flex flex-col items-center justify-center text-input-text pt-5 pb-6">
+                                            <svg class="w-8 h-8 mb-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h3a3 3 0 0 0 0-6h-.025a5.56 5.56 0 0 0 .025-.5A5.5 5.5 0 0 0 7.207 9.021C7.137 9.017 7.071 9 7 9a4 4 0 1 0 0 8h2.167M12 19v-9m0 0-2 2m2-2 2 2" /></svg>
+                                            <p class=""><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                            <p class="text-xs">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                                        </div>
+                                        <input accept="image/*, application/pdf" id="dropzone-file" type="file" className="mb-6 text-sm text-input-text" placeholder="" />
+                                    </label>
+                                </div>
+
                             </form>
 
                             <div className="mt-6 flex justify-end gap-4 max-md:w-full max-md:justify-start max-md:flex-col">
-                                <button
-                                    type="button"
-                                    command="close"
-                                    commandfor="createHomeWorkDialogue"
-                                    className="px-4 py-2 bg-background text-input-text border border-border rounded-full hover:bg-primary-text/15 transition duration-300 cursor-pointer"
-                                >
-                                    Cancelar
-                                </button>
-
                                 <button
                                     type="button"
                                     command="close"
@@ -200,6 +226,15 @@ export default function PageForm({ type }) {
                                     className="px-4 py-2 bg-primary text-white rounded-full hover:bg-primary/90 transition duration-300 cursor-pointer"
                                 >
                                     {type === "create" ? "Adicionar" : "Salvar"}
+                                </button>
+
+                                <button
+                                    type="button"
+                                    command="close"
+                                    commandfor="createHomeWorkDialogue"
+                                    className="px-4 py-2 bg-background text-input-text border border-border rounded-full hover:bg-primary-text/15 transition duration-300 cursor-pointer"
+                                >
+                                    Cancelar
                                 </button>
                             </div>
                         </el-dialog-panel>
