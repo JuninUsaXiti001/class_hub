@@ -22,7 +22,7 @@ export default function Navbar() {
                     Muquifo castelo
                 </span>
 
-                <div>
+                <div className="max-sm:w-full">
                     <PageForm type={"create"}/>
                 </div>
                 {/* <button onClick={addHandler} className="flex items-center justify-center gap-2 rounded-[10px] bg-primary px-3 py-2 text-white transition duration-300 cursor-pointer hover:bg-primary/80 max-sm:w-full">
