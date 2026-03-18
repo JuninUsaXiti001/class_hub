@@ -1,17 +1,13 @@
 'use client';
 
 import { cloneElement, useEffect, useState } from "react";
-import { Form } from "@/app/libs/models/form";
-import PageForm from "../components/ui/Form";
-import { usePostForm } from '@/app/hooks/usePostForm';
 import HomeWorkCard from "../components/cards/HomeWorkCard";
-import { HomeWork } from "@/app/libs/models/homework";
+import { usePostForm } from '@/app/hooks/usePostForm';
+import { HomeWork, getHomeWorkData } from "@/app/libs/models/homework";
 import icons from "../libs/icons";
 
 
 export default function Home() {
-  const { postForm, setPostForm } = usePostForm();
-
   const teste: HomeWork = {
     id: 1,
     type: "Tarefa",
@@ -23,27 +19,14 @@ export default function Home() {
     author: "Matheus"
   }
 
-  const [homeWorkData, setHomeWorkData] = useState<HomeWork[]>([]);
+  const { homeWorkData, setHomeWorkData } = usePostForm();
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await fetch("/api/homework");
-      const data = await response.json();
-
-      // Garantir que sempre é array
-      setHomeWorkData(Array.isArray(data) ? data : []);
-    }
-
-    fetchData();
+    getHomeWorkData({ setHomeWorkData });
   }, []);
 
   return (
     <main className="max-w-6xl mx-auto px-4">
-
-      {postForm.status && (
-        <PageForm type={postForm.type} />
-
-      )}
 
 
       <ul className={`grid mt-6 transition-all duration-300 ${homeWorkData.length === 0 ? "place-items-center" : "grid-cols-3 gap-4 max-md:grid-cols-2 max-sm:grid-cols-1"}`}>
@@ -56,7 +39,7 @@ export default function Home() {
             <h2 className="text-[#65758b] font-bold text-[20px]">Nenhum conteúdo encontrado</h2>
             <p className="text-[#65758b] text-[16px]">Clique em "Adicionar" para começar a organizar sua turma.</p>
           </div>
-          )
+        )
           :
           homeWorkData.map((homeWork) => (
             <HomeWorkCard key={homeWork.id} homeWork={homeWork} />

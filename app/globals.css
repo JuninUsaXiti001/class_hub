@@ -17,7 +17,7 @@
   --color-primary-text: #999999;
   --color-input-text: #1f2937;
   --color-type: #F59F0A;
-  
+  --color-red-btn: #EB2857;
 }
 
 @media (prefers-color-scheme: dark) {

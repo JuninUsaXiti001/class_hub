@@ -3,13 +3,9 @@
 import { cloneElement } from "react";
 import icons from "@/app/libs/icons"
 import { usePostForm } from '@/app/hooks/usePostForm';
+import PageForm from "@/app/components/ui/Form"
 
 export default function Navbar() {
-    const {postForm, setPostForm} = usePostForm();
-
-    function addHandler() {
-        setPostForm({type: "create", status:true})
-    }
 
     return (
         <header className="w-full border-b border-border px-4 py-2 flex justify-center">
@@ -26,10 +22,13 @@ export default function Navbar() {
                     Muquifo castelo
                 </span>
 
-                <button onClick={addHandler} className="flex items-center justify-center gap-2 rounded-[10px] bg-primary px-3 py-2 text-white transition duration-300 cursor-pointer hover:bg-primary/80 max-sm:w-full">
+                <div>
+                    <PageForm type={"create"}/>
+                </div>
+                {/* <button onClick={addHandler} className="flex items-center justify-center gap-2 rounded-[10px] bg-primary px-3 py-2 text-white transition duration-300 cursor-pointer hover:bg-primary/80 max-sm:w-full">
                     {cloneElement(icons.buttons.add, { className: " text-white" })}
                     <span className="text-[14px] font-semibold">Adicionar</span>
-                </button>
+                </button> */}
             </nav>
         </header>
     )

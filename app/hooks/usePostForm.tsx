@@ -1,23 +1,20 @@
 'use client'
 
 import { createContext, useContext, useState, ReactNode } from 'react';
-import { Form } from '@/app/libs/models/form';
+import { HomeWork } from '../libs/models/homework';
 
 type PostFormContextType = {
-  postForm: Form;
-  setPostForm: React.Dispatch<React.SetStateAction<Form>>;
+  homeWorkData: HomeWork[];
+  setHomeWorkData: React.Dispatch<React.SetStateAction<HomeWork[]>>;
 };
 
 const PostFormContext = createContext<PostFormContextType | null>(null);
 
 export function PostFormProvider({ children }: { children: ReactNode }) {
-  const [postForm, setPostForm] = useState<Form>({
-    type: "create",
-    status: false,
-  });
+  const [homeWorkData, setHomeWorkData] = useState<HomeWork[]>([]);
 
   return (
-    <PostFormContext.Provider value={{ postForm, setPostForm }}>
+    <PostFormContext.Provider value={{ homeWorkData, setHomeWorkData }}>
       {children}
     </PostFormContext.Provider>
   );
