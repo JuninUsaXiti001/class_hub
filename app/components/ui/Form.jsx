@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 
 const subjects = [
     "Matematica", "Física", "Química", "Biologia",
-    "Portugues", "Redacao", "Literatura", "Trajetoria",
+    "Gramática", "Redacao", "Literatura", "Trajetoria",
     "História", "Geografia", "Sociologia", "Filosofia", "Ingles"
 ];
 
