@@ -1,10 +1,10 @@
 'use client'
 
-import { usePostForm } from "@/app/hooks/usePostForm";
 import icons from "@/app/libs/icons";
 import "@tailwindplus/elements";
 import { cloneElement } from "react";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 const subjects = [
     "Matematica", "Física", "Química", "Biologia",
@@ -17,6 +17,9 @@ const types = [
 ]
 
 export default function PageForm({ type }) {
+    const [fileName, setFileName] = useState("Click to upload or drag and drop")
+
+
     async function createHomeWorkClient() {
         const c_type = document.getElementById("type-select").value
         const c_title = document.getElementById("title").value
@@ -33,21 +36,8 @@ export default function PageForm({ type }) {
         }
 
         if (c_file) {
-            const file_extension = c_file.name.split(".").pop()
-            if (file_extension != "pdf" && file_extension != "jpg" && file_extension != "png" && file_extension != "gif") {
-                //alert("Formato de arquivo não suportado. Por favor, selecione um arquivo PDF ou imagem (JPG, PNG, GIF).")
-                toast.error("Formato de arquivo não suportado. Por favor, selecione um arquivo PDF ou imagem (JPG, PNG, GIF).")
-                return
-            }
-
-            if (c_file.size > 5 * 1024 * 1024) { // Limite de 5MB
-                toast.error("O arquivo é muito grande. O limite é de 5MB.")
-                return
-            }
-
-            c_final_file.push({url: "1223123", type: file_extension})
+            c_final_file.push({ url: "1223123", type: file_extension })
         }
-
 
         try {
             const res = await fetch("/api/homework", {
@@ -84,6 +74,30 @@ export default function PageForm({ type }) {
             //alert("Erro na requisição")
             toast.error("Erro na requisição")
         }
+    }
+
+    function handleChange(e) {
+        const file = e.target.files[0];
+
+        if (!file) {
+            setFileName("Click to upload or drag and drop")
+            return
+        }
+
+        const file_extension = file.name.split('.').pop()
+        console.log(file_extension)
+
+        if (file_extension != "pdf" && file_extension != "png" && file_extension != "jpeg" && file_extension != "jpg") {
+            toast.error("Formato de arquivo não suportado. Por favor, selecione um arquivo PDF ou imagem (JPG, PNG, GIF).")
+            return
+        }
+
+        if (file.size > 5 * 1024 * 1024) { // Limite de 5MB
+            toast.error("O arquivo é muito grande. O limite é de 5MB.")
+            return
+        }
+
+        setFileName(file.name);
     }
 
     return (
@@ -203,13 +217,13 @@ export default function PageForm({ type }) {
 
                                 {/* File Zone */}
                                 <div class="flex items-center justify-center w-full cursor-pointer">
-                                    <label for="dropzone-file" class="rounded-2xl flex flex-col items-center justify-center w-full bg-white border border-dashed border-default-strong border-border rounded-base cursor-pointer hover:bg-neutral-tertiary-medium hover:border-primary transition duration-300">
-                                        <div class="flex flex-col items-center justify-center text-input-text pt-5 pb-6">
-                                            <svg class="w-8 h-8 mb-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h3a3 3 0 0 0 0-6h-.025a5.56 5.56 0 0 0 .025-.5A5.5 5.5 0 0 0 7.207 9.021C7.137 9.017 7.071 9 7 9a4 4 0 1 0 0 8h2.167M12 19v-9m0 0-2 2m2-2 2 2" /></svg>
-                                            <p class=""><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                    <label for="dropzone-file" class="rounded-2xl flex gap-2 px-2 items-center justify-center w-full bg-white border border-dashed border-default-strong border-border rounded-base cursor-pointer hover:bg-neutral-tertiary-medium hover:border-primary transition duration-300">
+                                        <svg class="w-8 h-8" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h3a3 3 0 0 0 0-6h-.025a5.56 5.56 0 0 0 .025-.5A5.5 5.5 0 0 0 7.207 9.021C7.137 9.017 7.071 9 7 9a4 4 0 1 0 0 8h2.167M12 19v-9m0 0-2 2m2-2 2 2" /></svg>
+                                        <div class="flex flex-col items-center justify-center text-input-text py-4">
+                                            <p class="text-sm text-input-text">{fileName}</p>
+                                            <input onChange={handleChange} accept="image/*, application/pdf" id="dropzone-file" type="file" className="hidden" placeholder="Click to upload or drag and drop" />
                                             <p class="text-xs">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                                         </div>
-                                        <input accept="image/*, application/pdf" id="dropzone-file" type="file" className="mb-6 text-sm text-input-text" placeholder="" />
                                     </label>
                                 </div>
 

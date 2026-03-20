@@ -1,8 +1,11 @@
-import icons from "@/app/libs/icons";
+'use client'
+
+import { toast } from "react-toastify";
 import { cloneElement } from "react";
 import "@tailwindplus/elements"
+
+import icons from "@/app/libs/icons";
 import { deleteHomeWork } from "@/app/libs/models/homework";
-import { toast } from "react-toastify";
 
 const meses = [
     "Jan",
@@ -104,13 +107,21 @@ function DeleteButtonUI({ homeWork }) {
 }
 
 export default function HomeWorkCard({ homeWork }) {
+
+    // Date logic
     const date = new Date(homeWork.date);
+    const dateNow = new Date()
 
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = meses[date.getMonth()];
-    const year = date.getFullYear();
+    const dayNow = dateNow.getDate().toString()
 
-    const formattedDate = `${day} ${month} ${year}`;
+    const days = [date.getDate().toString().padStart(2, "0"), meses[date.getMonth()], date.getFullYear()];
+
+    const diffTime = date - dateNow;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    const priority = diffDays < 0 ? null : diffDays <= 1 ? 1 : diffDays <= 3 ? 2 : null;
+
+    const formattedDate = `${days[0]} ${days[1]} ${days[2]}`;
 
     return (
         <div className="p-4 flex flex-col gap-4 justify-start bg-white rounded-2xl border border-border hover:shadow-lg hover:shadow-gray-500/15 cursor-pointer transition duration-300 hover:border-input-text/10">
@@ -149,20 +160,32 @@ export default function HomeWorkCard({ homeWork }) {
                 </p>
             </section>
 
-            <section className="flex gap-2 items-center text-[#65758b]">
-                <span className="text-[12px] flex items-center gap-1">
-                    {cloneElement(icons.geral.date, {
-                        className: "inline-block size-4",
-                    })}
-                    {"Para: " + formattedDate}
-                </span>
+            <section className="flex items-center gap-2 flex-wrap">
+                {priority ?
+                    (<span className="bg-red-700/15 text-red-600 px-2 py-px rounded-full border border-red-600 text-[12px]">
+                        {priority == 1 ? "Amanhã" : "Urgente"}
+                    </span>)
+                    :
+                    (<div>
 
-                <span className="text-[12px] flex items-center gap-1">
-                    {cloneElement(icons.geral.user, {
-                        className: "inline-block size-4",
-                    })}
-                    {homeWork.author}
-                </span>
+                    </div>
+                    )}
+
+                <div className="flex gap-2 items-center text-[#65758b]">
+                    <span className="text-[12px] flex items-center gap-1">
+                        {cloneElement(icons.geral.date, {
+                            className: "inline-block size-4",
+                        })}
+                        {"Para: " + formattedDate}
+                    </span>
+
+                    <span className="text-[12px] flex items-center gap-1">
+                        {cloneElement(icons.geral.user, {
+                            className: "inline-block size-4",
+                        })}
+                        {homeWork.author}
+                    </span>
+                </div>
             </section>
         </div>
     );
