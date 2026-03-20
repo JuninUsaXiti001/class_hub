@@ -28,10 +28,11 @@ const colors = {
     "Slide/Material": "#f59e0b"
 };
 
-function DeleteButtonUI({ homeWork }) {
+function DeleteButtonUI({id, title}) {
+    console.log
 
     async function deleteHomeWorkClient() {
-        const del = await deleteHomeWork(homeWork.id)
+        const del = await deleteHomeWork(id)
 
         if (del == 200) {
             toast.success("Tarefa deletada com sucesso!")
@@ -44,14 +45,14 @@ function DeleteButtonUI({ homeWork }) {
             <button className="">
             </button>
 
-            <button command="show-modal" commandfor="deleteHomeWorkDialogue" className="p-1 rounded-[7px] text-[#65758b] cursor-pointer hover:text-[#cc1d1d] hover:bg-[#cc1d1d]/20 transition duration-300">
+            <button command="show-modal" commandfor={`deleteHomeWorkDialogue-${id}`} className="p-1 rounded-[7px] text-[#65758b] cursor-pointer hover:text-[#cc1d1d] hover:bg-[#cc1d1d]/20 transition duration-300">
                 {cloneElement(icons.buttons.remove, {
                     className: "size-4.5",
                 })}
             </button>
 
             <el-dialog>
-                <dialog id="deleteHomeWorkDialogue" aria-labelledby="dialog-title" className="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent">
+                <dialog id={`deleteHomeWorkDialogue-${id}`} aria-labelledby="dialog-title" className="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent">
                     <el-dialog-backdrop className="fixed inset-0 bg-gray-900/50 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"></el-dialog-backdrop>
 
                     <div tabIndex="0" className="flex min-h-full items-center justify-center p-4 text-center focus:outline-none sm:items-center sm:p-0">
@@ -71,7 +72,7 @@ function DeleteButtonUI({ homeWork }) {
 
                                         <div className="mt-2">
                                             <p className="text-sm text-input-text">
-                                                Você tem certeza que deseja deletar está tarefa? Ela será deletada permanentemente. Se Sim, clique em "Deletar"
+                                                Você tem certeza que deseja deletar a tarefa <span className="font-semibold">{ "ID: " + id + " | " + title}</span>? Ela será deletada permanentemente. Se Sim, clique em "Deletar"
                                             </p>
                                         </div>
                                     </div>
@@ -83,7 +84,7 @@ function DeleteButtonUI({ homeWork }) {
                                     type="button"
                                     onClick={deleteHomeWorkClient}
                                     command="close"
-                                    commandfor="deleteHomeWorkDialogue"
+                                    commandfor={`deleteHomeWorkDialogue-${id}`}
                                     className="inline-flex w-full justify-center rounded-full bg-[#EB2857] px-4 py-2 text-sm font-medium text-white hover:bg-[#EB2857]/90 sm:ml-3 sm:w-auto transition duration-300 cursor-pointer"
                                 >
                                     Deletar
@@ -92,7 +93,7 @@ function DeleteButtonUI({ homeWork }) {
                                 <button
                                     type="button"
                                     command="close"
-                                    commandfor="deleteHomeWorkDialogue"
+                                    commandfor={`deleteHomeWorkDialogue-${id}`}
                                     className="bg-background text-input-text border border-border hover:bg-primary-text/15 mt-3 inline-flex w-full justify-center rounded-full px-4 py-2 text-sm font-medium inset-ring inset-ring-white/5 sm:mt-0 sm:w-auto transition duration-300 cursor-pointer"
                                 >
                                     Cancelar
@@ -119,7 +120,7 @@ export default function HomeWorkCard({ homeWork }) {
     const diffTime = date - dateNow;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    const priority = diffDays < 0 ? null : diffDays <= 1 ? 1 : diffDays <= 3 ? 2 : null;
+    const priority = homeWork.type !== "Slide/Material"? diffDays < 0 ? null : diffDays <= 1 ? 1 : diffDays <= 3 ? 2 : null : null;
 
     const formattedDate = `${days[0]} ${days[1]} ${days[2]}`;
 
@@ -140,7 +141,7 @@ export default function HomeWorkCard({ homeWork }) {
                 </div>
 
                 <div className="flex items-center gap-1">
-                    <DeleteButtonUI homeWork={homeWork} />
+                    <DeleteButtonUI id={homeWork.id} title={homeWork.title} />
 
                     <button className="p-1 rounded-[7px] text-[#65758b] cursor-pointer hover:text-input-text hover:bg-input-text/20 transition duration-300">
                         {cloneElement(icons.buttons.edit, {

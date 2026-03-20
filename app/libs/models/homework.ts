@@ -33,7 +33,7 @@ export async function createHomeWork(homeWork: HomeWork) {
 }
 
 export async function deleteHomeWork(id: number) {
-    const querie = fetch(`/api/homework/${id}`, {
+    const querie = fetch(`/api/homework/${Number(id)}`, {
         method: 'DELETE',
     })
 
