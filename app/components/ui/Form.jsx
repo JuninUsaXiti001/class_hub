@@ -5,6 +5,7 @@ import "@tailwindplus/elements";
 import { cloneElement } from "react";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import {creatCdnUpload} from '@/app/libs/cdn'
 
 const subjects = [
     "Matematica", "Física", "Química", "Biologia",
@@ -27,6 +28,7 @@ export default function PageForm({ type }) {
         const c_description = document.getElementById("description").value
         const c_date = document.getElementById("date-picker").value
         const c_author = document.getElementById("author").value
+
         const c_file = document.getElementById("dropzone-file").files[0]
         const c_final_file = [];
 
@@ -36,7 +38,10 @@ export default function PageForm({ type }) {
         }
 
         if (c_file) {
-            c_final_file.push({ url: "1223123", type: file_extension })
+            const teste = await creatCdnUpload(c_file)
+            console.log(teste)
+            toast.info(JSON.stringify(teste))
+            // c_final_file.push({ url: "1223123", type: file_extension })
         }
 
         try {
